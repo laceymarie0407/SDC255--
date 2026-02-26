@@ -1,70 +1,61 @@
-#include <stdio.h>
+#include <iostream>
+#include <fstream>
+#include <string>
 
-void writeFile(){
-	
-    // write to file
-    // write file as fp
-    FILE *fp;
-    
-    //open file path and in write mode
-    fp = fopen("D:\\ECPI\\codes\\FinalSDC255\\test.txt", "w+");
+void writeFile() {
+    // open file in write mode using ofstream
+    std::ofstream fp("D:\\ECPI\\codes\\FinalSDC255\\test.txt");
 
-	// checking if file open correctly and if not print error and stop 
-    if (fp == NULL)
-    {
-        printf("Error opening file..."); 
-		return;
+    // checking if file opened correctly, if not print error and stop
+    if (!fp.is_open()) {
+        std::cout << "Error opening file..." << std::endl;
+        return;
     }
-    
-    // write to file
-    fprintf(fp, "This is testing fprintf...\n");
-    fputs("This is testing for fputs...\n", fp);
 
-	// close file after writing
-    fclose(fp);
-    printf("File has been written...\n");
+    // write to file using << operator
+    fp << "This is testing fprintf..." << std::endl;
+    fp << "This is testing for fputs..." << std::endl;
+
+    // close file after writing
+    fp.close();
+    std::cout << "File has been written..." << std::endl;
 }
 
-void readFile(){
-	// read file
-	
-	FILE *fp;
-	
-    // reopen write file but this time as read mode
-    fp = fopen("D:\\ECPI\\codes\\FinalSDC255\\test.txt", "r");
-    
-    // checking if file open correctly and if not print error and stop 
-    if (fp == NULL)
-    {
-        printf("Error opening file..."); 
-		return;
+void readFile() {
+    // open file in read mode using ifstream
+    std::ifstream fp("D:\\ECPI\\codes\\FinalSDC255\\test.txt");
+
+    // checking if file opened correctly, if not print error and stop
+    if (!fp.is_open()) {
+        std::cout << "Error opening file..." << std::endl;
+        return;
     }
-    
-    // how many characters you can read per line
-    char buff[255];
-    
-    fscanf(fp, "%s", buff);
-	printf("1 : %s\n", buff );
-	
-    //read the rest of line 1
-    fgets(buff, 255, fp);
-    printf("2 : %s\n", buff);
-    
-    //read all of the second line
-    fgets(buff, 255, fp);
-    printf("3 : %s\n", buff);
-    
-    //close file
-    fclose(fp);
+
+    std::string buff;
+
+    // read first word from line 1
+    fp >> buff;
+    std::cout << "1 : " << buff << std::endl;
+
+    // read the rest of line 1
+    std::getline(fp, buff);
+    std::cout << "2 : " << buff << std::endl;
+
+    // read all of line 2
+    std::getline(fp, buff);
+    std::cout << "3 : " << buff << std::endl;
+
+    // close file
+    fp.close();
 }
-int main()
-{
+
+int main() {
     writeFile();
-    
+
     readFile();
-    
-    printf("Press enter to exit");
-    getchar();
-    
+
+    std::cout << "Press enter to exit";
+    std::cin.get();
+
     return 0;
 }
