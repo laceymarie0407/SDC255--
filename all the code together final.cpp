@@ -3,6 +3,7 @@
 #include <string>
 #include <stdio.h>
 #include <stdlib.h>
+#include <climits>
 
 // File path
 static const char* FILE_PATH = "test.txt";
@@ -88,23 +89,29 @@ void firstCalculation()
 // =============================================
 void secondCalculation()
 {
-    int num1, num2, result;
-
+    long long num1, num2, result;
     std::cout << "\n--- Second Calculation (Multiplication) ---" << std::endl;
     std::cout << "Insert 2 numbers to multiply: ";
     std::cin >> num1 >> num2;
 
-    result = num1 * num2;
-    std::cout << "Multiply: " << num1 << " x " << num2 << " = " << result << std::endl;
+    // Check if either number exceeds 1,000,000
+    bool isLarge = (num1 > 1000000 || num1 < -1000000 || num2 > 1000000 || num2 < -1000000);
 
-    std::ofstream fp(FILE_PATH, std::ios::app);
-    if (fp.is_open()) {
-        fp << "Multiply: " << num1 << " x " << num2 << " = " << result << std::endl;
-        fp.close();
-        std::cout << "Result saved to file." << std::endl;
-    } else {
-        std::cout << "Could not save result to file." << std::endl;
+    if (isLarge)
+    {
+        // Check for overflow before multiplying using LLONG_MAX from <climits>
+        if (num2 != 0 && (num1 > LLONG_MAX / num2 || num1 < LLONG_MIN / num2))
+        {
+            std::cout << "Warning: Overflow detected! Numbers are too large to multiply safely." << std::endl;
+            std::cout << "Max safe value: " << LLONG_MAX << std::endl;
+            return;
+        }
+        std::cout << "Note: Large numbers detected, using 64-bit precision." << std::endl;
     }
+
+    result = num1 * num2;
+    std::cout << "Multiply: " << num1 << " and " << num2 << std::endl;
+    std::cout << "Result: " << result << std::endl;
 }
 
 // =============================================
@@ -215,3 +222,4 @@ int main(void)
     printf("Exiting program...\n");
     return 0;
 }
+
