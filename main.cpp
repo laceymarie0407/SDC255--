@@ -1,6 +1,5 @@
-#include <stdio.h>
+#include <iostream>
 #include "menu.h"
-#include "mainLoop.h"   // Broderick’s file (FP-6)
 
 int main(void)
 {
@@ -8,15 +7,16 @@ int main(void)
 
     do
     {
-        option = menu();          // get user selection
+        option = menu();
 
-        if (option != 5)          // 5 = Exit
+        if (option != 5)
         {
-            mainLoop(option);     // route to correct module
+            mainLoop(option);
         }
 
     } while (option != 5);
 
-    printf("Exiting program...\n");
+    std::cout << "Exiting program..." << std::endl;
     return 0;
 }
+
